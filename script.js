@@ -192,9 +192,10 @@ if (bwPopup && bwMensalModal) {
     const textoOriginal = botao.innerHTML;
     botao.textContent = 'Enviando...';
     try {
+      // Falha de rede vira mensagem em português (o navegador devolve "Failed to fetch").
       const r = await fetch('https://crm.simpp.com.br/api/black-week-mensal', {
         method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(dados),
-      });
+      }).catch(() => { throw new Error('Não foi possível enviar agora.'); });
       const corpo = await r.json().catch(() => ({}));
       if (!r.ok) throw new Error(corpo.error || 'Não foi possível enviar agora.');
       if (typeof window.fbq !== 'undefined') window.fbq('track', 'Lead', { content_name: 'Black Week mensal' });

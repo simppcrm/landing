@@ -21,7 +21,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
-  <link rel="stylesheet" href="styles.css?v=7">
+  <link rel="stylesheet" href="styles.css?v=8">
   <script>
     // Black Week (25/11 a 01/12/2026): até o fim, a página entra no modo
     // Black Week (classe "bw" no <html>); depois volta sozinha ao normal.
@@ -43,9 +43,9 @@
   <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
   <div class="bw-bar bw-only" role="region" aria-label="Black Week">
     <div class="container bw-bar-inner">
-      <span class="bw-bar-tag">Black Week</span>
+      <span class="bw-3d bw-bar-tag" data-text="BLACK WEEK">BLACK WEEK</span>
       <span class="bw-bar-text"><strong>20% off no anual</strong> ou <strong>1º mês grátis no mensal</strong> · até 01/12</span>
-      <span class="bw-bar-timer" id="bwTimer" aria-live="off"></span>
+      <span class="bw-timer bw-bar-timer" data-bw-timer aria-label="Tempo restante da Black Week"></span>
       <a class="bw-bar-link" href="#planos">Ver oferta <i class="ti ti-arrow-right"></i></a>
     </div>
   </div>
@@ -236,7 +236,7 @@
           <div class="single-plan-actions">
             <button class="button button-outline button-large" data-open-trial>Testar o Simpp grátis <i class="ti ti-arrow-right"></i></button>
             <a class="button button-primary button-large bw-off" href="https://www.asaas.com/000/c/y31io8gtssaghz3r" target="_blank" rel="noopener" data-checkout data-checkout-value="79.90">Assinar mensal <i class="ti ti-arrow-up-right"></i></a>
-            <a class="button button-primary button-large bw-only" href="LINK_MENSAL_BLACK_WEEK" target="_blank" rel="noopener" data-checkout data-checkout-value="79.90">Assinar com 1º mês grátis <i class="ti ti-arrow-up-right"></i></a>
+            <button class="button button-primary button-large bw-only" type="button" data-open-bw-mensal>Assinar com 1º mês grátis <i class="ti ti-arrow-right"></i></button>
           </div>
         </article>
         <article class="plan-card featured dark reveal">
@@ -312,7 +312,7 @@
     <div class="container footer-bottom"><span>© 2026 Simpp. Todos os direitos reservados.</span><span>Feito para quem protege o que importa.</span></div>
   </footer>
 
-  <aside class="promotion-popup" id="promotionPopup" aria-label="Oferta promocional" aria-hidden="true">
+  <aside class="promotion-popup bw-off" id="promotionPopup" aria-label="Oferta promocional" aria-hidden="true">
     <button class="promotion-close" type="button" data-close-promotion aria-label="Fechar oferta"><i class="ti ti-x"></i></button>
     <span class="promotion-icon"><i class="ti ti-bolt"></i></span>
     <div class="promotion-copy bw-off"><small>Planos Simpp</small><strong>Mensal sem compromisso ou anual com desconto.</strong><p>Escolha como prefere pagar e comece a organizar sua carteira hoje.</p></div>
@@ -335,7 +335,59 @@
     </div>
   </div>
 
+  <!-- Black Week: pop-up central ao entrar no site (uma vez por visita). -->
+  <div class="modal-overlay bw-pop-overlay bw-only" id="bwPopup" aria-hidden="true">
+    <div class="bw-pop" role="dialog" aria-modal="true" aria-labelledby="bwPopTitle">
+      <button class="modal-close" type="button" data-close-bw-popup aria-label="Fechar"><i class="ti ti-x"></i></button>
+      <span class="bw-pop-kicker">Só até 01/12</span>
+      <h2 class="bw-3d bw-pop-title" id="bwPopTitle" data-text="BLACK WEEK">BLACK WEEK</h2>
+      <p class="bw-pop-sub">O melhor preço do ano pra organizar sua corretora no Simpp.</p>
+      <div class="bw-timer bw-pop-timer" data-bw-timer aria-label="Tempo restante da Black Week"></div>
+      <div class="bw-pop-offers">
+        <a class="bw-pop-offer bw-pop-offer-main" href="https://www.asaas.com/000/c/fy54js9gvfneb6b1" target="_blank" rel="noopener" data-checkout data-checkout-value="559.92">
+          <span class="bw-pop-badge">20% off</span>
+          <strong>Plano anual</strong>
+          <span class="bw-pop-price"><s>R$ 699,90</s> R$ 559,92</span>
+          <small>ou em até 3x de R$ 186,64 no cartão</small>
+          <span class="bw-pop-cta">Assinar com 20% off <i class="ti ti-arrow-up-right"></i></span>
+        </a>
+        <button class="bw-pop-offer" type="button" data-open-bw-mensal>
+          <span class="bw-pop-badge">Grátis</span>
+          <strong>Plano mensal</strong>
+          <span class="bw-pop-price">1º mês grátis</span>
+          <small>depois R$ 79,90/mês</small>
+          <span class="bw-pop-cta">Quero o 1º mês grátis <i class="ti ti-arrow-right"></i></span>
+        </button>
+      </div>
+      <button class="bw-pop-secondary" type="button" data-bw-popup-trial>Prefiro testar 7 dias grátis primeiro</button>
+    </div>
+  </div>
+
+  <!-- Black Week: pedido do mensal com 1º mês grátis (vai por e-mail pro suporte do Simpp). -->
+  <div class="modal-overlay" id="bwMensalModal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="bwMensalTitle">
+      <button class="modal-close" type="button" data-close-bw-mensal aria-label="Fechar"><i class="ti ti-x"></i></button>
+      <form id="bwMensalForm" novalidate>
+        <span class="modal-kicker">Black Week · até 01/12</span>
+        <h2 id="bwMensalTitle">Plano mensal com 1º mês grátis</h2>
+        <p>Preencha os dados da assinatura. Nossa equipe libera seu acesso e entra em contato em até 1 dia útil. A partir do 2º mês, R$ 79,90/mês.</p>
+        <div class="form-grid bw-form-grid">
+          <label class="bw-span">Nome ou razão social<input type="text" name="nome" autocomplete="name" maxlength="120" required></label>
+          <label>CPF ou CNPJ<input type="text" name="documento" inputmode="numeric" maxlength="18" placeholder="000.000.000-00" required></label>
+          <label>Telefone / WhatsApp<input type="tel" name="telefone" inputmode="tel" autocomplete="tel" maxlength="20" placeholder="(00) 00000-0000" required></label>
+          <label class="bw-span">E-mail<input type="email" name="email" autocomplete="email" maxlength="160" placeholder="seu@email.com" required></label>
+          <label class="bw-span">Endereço completo<input type="text" name="endereco" autocomplete="street-address" maxlength="300" placeholder="Rua, número, bairro, cidade/UF e CEP" required></label>
+          <input class="bw-hp" type="text" name="site" tabindex="-1" autocomplete="off" aria-hidden="true">
+        </div>
+        <button class="button button-primary button-block" type="submit" id="bwMensalEnviar">Solicitar 1º mês grátis <i class="ti ti-arrow-right"></i></button>
+        <div class="form-error" id="bwMensalErro" role="alert"></div>
+        <small class="modal-legal"><i class="ti ti-lock"></i> Seus dados são usados só para criar sua assinatura. <a href="privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a></small>
+      </form>
+      <div class="modal-success" id="bwMensalOk"><span><i class="ti ti-circle-check"></i></span><h2>Pedido recebido!</h2><p>Recebemos seus dados. Nossa equipe vai liberar seu acesso e falar com você em até 1 dia útil.</p><button class="button button-primary button-block" type="button" data-close-bw-mensal>Fechar</button></div>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="script.js?v=6"></script>
+  <script src="script.js?v=7"></script>
 </body>
 </html>

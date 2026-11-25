@@ -75,6 +75,139 @@ if (promotionPopup) {
     closePromotion(true);
     openModal();
   });
+  document.querySelectorAll('[data-close-promotion-link]').forEach((link) => link.addEventListener('click', () => closePromotion(true)));
+}
+
+// ─── Black Week (25/11 a 01/12/2026) ─────────────────────────────────────
+// Contagem regressiva em blocos (faixa do topo e pop-up). Se a página ficar
+// aberta até o fim da campanha, sai do modo Black Week sozinha.
+const bwAtiva = () => document.documentElement.classList.contains('bw');
+function atualizarBlackWeek() {
+  const restante = window.BLACK_WEEK_FIM - Date.now();
+  if (restante <= 0) {
+    document.documentElement.classList.remove('bw');
+    return false;
+  }
+  const partes = [
+    [Math.floor(restante / 86400000), 'dias'],
+    [Math.floor((restante % 86400000) / 3600000), 'h'],
+    [Math.floor((restante % 3600000) / 60000), 'min'],
+    [Math.floor((restante % 60000) / 1000), 's'],
+  ];
+  const html = partes.map(([n, rotulo]) => `<span class="bw-unit"><b>${String(n).padStart(2, '0')}</b><small>${rotulo}</small></span>`).join('');
+  document.querySelectorAll('[data-bw-timer]').forEach((el) => { el.innerHTML = html; });
+  return true;
+}
+if (bwAtiva() && atualizarBlackWeek()) {
+  const bwIntervalo = setInterval(() => { if (!atualizarBlackWeek()) clearInterval(bwIntervalo); }, 1000);
+}
+
+// Abre/fecha um overlay genérico (mesmo padrão do modal do teste grátis).
+function abrirOverlay(el) {
+  el.classList.add('open');
+  el.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+}
+function fecharOverlay(el) {
+  el.classList.remove('open');
+  el.setAttribute('aria-hidden', 'true');
+  if (!document.querySelector('.modal-overlay.open')) document.body.style.overflow = '';
+}
+
+// Pop-up central ao entrar no site, uma vez por visita.
+const bwPopup = document.getElementById('bwPopup');
+const bwMensalModal = document.getElementById('bwMensalModal');
+const bwMensalForm = document.getElementById('bwMensalForm');
+const bwMensalOk = document.getElementById('bwMensalOk');
+const fecharBwPopup = () => { if (bwPopup) fecharOverlay(bwPopup); };
+
+function abrirBwMensal() {
+  fecharBwPopup();
+  closeModal();
+  bwMensalForm.style.display = '';
+  bwMensalOk.style.display = 'none';
+  document.getElementById('bwMensalErro').textContent = '';
+  abrirOverlay(bwMensalModal);
+  setTimeout(() => bwMensalForm.elements.nome.focus(), 250);
+}
+
+if (bwPopup && bwMensalModal) {
+  const pedeMensal = new URLSearchParams(location.search).get('bw') === 'mensal';
+  let popupVisto = false;
+  try { popupVisto = sessionStorage.getItem('simpp-bw-popup-visto') === 'true'; } catch (error) { /* armazenamento indisponível */ }
+  if (bwAtiva() && pedeMensal) {
+    abrirBwMensal();
+  } else if (bwAtiva() && !popupVisto) {
+    setTimeout(() => {
+      if (!document.querySelector('.modal-overlay.open')) abrirOverlay(bwPopup);
+      try { sessionStorage.setItem('simpp-bw-popup-visto', 'true'); } catch (error) { /* armazenamento indisponível */ }
+    }, 1200);
+  }
+
+  bwPopup.querySelector('[data-close-bw-popup]').addEventListener('click', fecharBwPopup);
+  bwPopup.addEventListener('click', (event) => { if (event.target === bwPopup) fecharBwPopup(); });
+  bwPopup.querySelector('.bw-pop-offer-main').addEventListener('click', fecharBwPopup);
+  bwPopup.querySelector('[data-bw-popup-trial]').addEventListener('click', () => { fecharBwPopup(); openModal(); });
+  document.querySelectorAll('[data-open-bw-mensal]').forEach((btn) => btn.addEventListener('click', abrirBwMensal));
+  bwMensalModal.querySelectorAll('[data-close-bw-mensal]').forEach((btn) => btn.addEventListener('click', () => fecharOverlay(bwMensalModal)));
+  bwMensalModal.addEventListener('click', (event) => { if (event.target === bwMensalModal) fecharOverlay(bwMensalModal); });
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    if (bwPopup.classList.contains('open')) fecharBwPopup();
+    if (bwMensalModal.classList.contains('open')) fecharOverlay(bwMensalModal);
+  });
+
+  // Máscaras simples de CPF/CNPJ e telefone.
+  const soDigitos = (v) => v.replace(/\D/g, '');
+  bwMensalForm.elements.documento.addEventListener('input', (e) => {
+    const d = soDigitos(e.target.value).slice(0, 14);
+    e.target.value = d.length <= 11
+      ? d.replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})\.(\d{3})(\d)/, '$1.$2.$3').replace(/(\d{3})\.(\d{3})\.(\d{3})(\d)/, '$1.$2.$3-$4')
+      : d.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{0,2})/, '$1.$2.$3/$4-$5');
+  });
+  bwMensalForm.elements.telefone.addEventListener('input', (e) => {
+    const d = soDigitos(e.target.value).slice(0, 11);
+    e.target.value = d.length > 10 ? d.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3') : d.replace(/(\d{2})(\d{0,4})(\d{0,4})/, (m, a, b, c) => `(${a}) ${b}${c ? '-' + c : ''}`);
+  });
+
+  bwMensalForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const f = bwMensalForm.elements;
+    const erro = document.getElementById('bwMensalErro');
+    const botao = document.getElementById('bwMensalEnviar');
+    erro.textContent = '';
+    const dados = {
+      nome: f.nome.value.trim(), documento: f.documento.value, telefone: f.telefone.value,
+      email: f.email.value.trim(), endereco: f.endereco.value.trim(), site: f.site.value,
+    };
+    const doc = soDigitos(dados.documento);
+    if (dados.nome.length < 3) return (erro.textContent = 'Informe o nome ou a razão social.');
+    if (doc.length !== 11 && doc.length !== 14) return (erro.textContent = 'Informe um CPF ou CNPJ válido.');
+    const tel = soDigitos(dados.telefone);
+    if (tel.length < 10 || tel.length > 11) return (erro.textContent = 'Informe um telefone válido, com DDD.');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(dados.email)) return (erro.textContent = 'Informe um e-mail válido.');
+    if (dados.endereco.length < 10) return (erro.textContent = 'Informe o endereço completo.');
+
+    botao.disabled = true;
+    const textoOriginal = botao.innerHTML;
+    botao.textContent = 'Enviando...';
+    try {
+      // Falha de rede vira mensagem em português (o navegador devolve "Failed to fetch").
+      const r = await fetch('https://crm.simpp.com.br/api/black-week-mensal', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(dados),
+      }).catch(() => { throw new Error('Não foi possível enviar agora.'); });
+      const corpo = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(corpo.error || 'Não foi possível enviar agora.');
+      if (typeof window.fbq !== 'undefined') window.fbq('track', 'Lead', { content_name: 'Black Week mensal' });
+      bwMensalForm.style.display = 'none';
+      bwMensalOk.style.display = 'block';
+    } catch (e) {
+      erro.innerHTML = `${e.message} Tente de novo ou <a href="https://wa.me/5511942688776?text=${encodeURIComponent('Olá! Quero o plano mensal da Black Week com 1º mês grátis.')}" target="_blank" rel="noopener">fale com a gente no WhatsApp</a>.`;
+    } finally {
+      botao.disabled = false;
+      botao.innerHTML = textoOriginal;
+    }
+  });
 }
 
 document.querySelectorAll('[data-checkout]').forEach((link) => {

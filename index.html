@@ -21,7 +21,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
-  <link rel="stylesheet" href="styles.css?v=6">
+  <link rel="stylesheet" href="styles.css?v=9">
+  <script>
+    // Black Week (25/11 a 01/12/2026): até o fim, a página entra no modo
+    // Black Week (classe "bw" no <html>); depois volta sozinha ao normal.
+    window.BLACK_WEEK_FIM = new Date('2026-12-01T23:59:59-03:00').getTime();
+    if (Date.now() <= window.BLACK_WEEK_FIM) document.documentElement.classList.add('bw');
+  </script>
   <script>
     !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
     n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
@@ -35,6 +41,14 @@
 <body>
   <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=2040005986902175&ev=PageView&noscript=1" alt=""></noscript>
   <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+  <div class="bw-bar bw-only" role="region" aria-label="Black Week">
+    <div class="container bw-bar-inner">
+      <span class="bw-3d bw-bar-tag" data-text="BLACK WEEK">BLACK WEEK</span>
+      <span class="bw-bar-text"><strong>20% off no anual</strong> ou <strong>1º mês grátis no mensal</strong> · até 01/12</span>
+      <span class="bw-timer bw-bar-timer" data-bw-timer aria-label="Tempo restante da Black Week"></span>
+      <a class="bw-bar-link" href="#planos">Ver oferta <i class="ti ti-arrow-right"></i></a>
+    </div>
+  </div>
   <header class="site-header" id="header">
     <div class="container nav-wrap">
       <a class="brand" href="#top" aria-label="Simpp, início">
@@ -197,12 +211,16 @@
     </section>
 
     <section class="plans section" id="planos">
-      <div class="container center-heading reveal"><span class="section-kicker">Planos</span><h2>Escolha como prefere pagar.<br>Os recursos são os mesmos.</h2><p>Mensal pra começar sem compromisso, ou anual com desconto.</p></div>
+      <div class="container center-heading reveal bw-off"><span class="section-kicker">Planos</span><h2>Escolha como prefere pagar.<br>Os recursos são os mesmos.</h2><p>Mensal pra começar sem compromisso, ou anual com desconto.</p></div>
+      <div class="container center-heading reveal bw-only"><span class="section-kicker">Black Week · até 01/12</span><h2>O melhor preço do ano<br>pra organizar sua corretora.</h2><p>20% off no plano anual ou o 1º mês grátis no mensal. Só até 01/12.</p></div>
       <div class="container plan-grid plan-grid-2">
         <article class="plan-card reveal">
+          <div class="popular bw-only"><i class="ti ti-gift"></i> 1º mês grátis</div>
           <div class="plan-top"><span class="plan-name">Simpp Mensal</span><p>Para quem quer começar sem compromisso de longo prazo.</p></div>
-          <div class="plan-price"><sup>R$</sup><strong>79</strong><span>,90<br>por mês</span></div>
-          <div class="plan-price-note">Cobrança mensal no boleto. Até 5 usuários.</div>
+          <div class="plan-price bw-off"><sup>R$</sup><strong>79</strong><span>,90<br>por mês</span></div>
+          <div class="plan-price-note bw-off">Cobrança mensal no boleto. Até 5 usuários.</div>
+          <div class="plan-price bw-only"><strong>Grátis</strong><span>no 1º mês<br>depois R$ 79,90/mês</span></div>
+          <div class="plan-price-note bw-only">Assinando até 01/12. Cobrança mensal no boleto a partir do 2º mês. Até 5 usuários.</div>
           <div class="plan-rule"></div>
           <strong class="plan-for">O que está incluído</strong>
           <ul>
@@ -217,14 +235,19 @@
           </ul>
           <div class="single-plan-actions">
             <button class="button button-outline button-large" data-open-trial>Testar o Simpp grátis <i class="ti ti-arrow-right"></i></button>
-            <a class="button button-primary button-large" href="https://www.asaas.com/000/c/y31io8gtssaghz3r" target="_blank" rel="noopener" data-checkout data-checkout-value="79.90">Assinar mensal <i class="ti ti-arrow-up-right"></i></a>
+            <a class="button button-primary button-large bw-off" href="https://www.asaas.com/000/c/y31io8gtssaghz3r" target="_blank" rel="noopener" data-checkout data-checkout-value="79.90">Assinar mensal <i class="ti ti-arrow-up-right"></i></a>
+            <button class="button button-primary button-large bw-only" type="button" data-open-bw-mensal>Assinar com 1º mês grátis <i class="ti ti-arrow-right"></i></button>
           </div>
         </article>
         <article class="plan-card featured dark reveal">
-          <div class="popular"><i class="ti ti-bolt"></i> Mais vantajoso</div>
+          <div class="popular bw-off"><i class="ti ti-bolt"></i> Mais vantajoso</div>
+          <div class="popular bw-only"><i class="ti ti-bolt"></i> Black Week · 20% off</div>
           <div class="plan-top"><span class="plan-name">Simpp Anual</span><p>Para quem já sabe que vai usar o ano inteiro e quer pagar menos.</p></div>
-          <div class="plan-price"><sup>R$</sup><strong>699</strong><span>,90<br>por ano, à vista</span></div>
-          <div class="plan-price-note">Ou em até 3x de R$ 233,30 no cartão, dentro do próprio checkout. Até 5 usuários.</div>
+          <div class="plan-price bw-off"><sup>R$</sup><strong>699</strong><span>,90<br>por ano, à vista</span></div>
+          <div class="plan-price-note bw-off">Ou em até 3x de R$ 233,30 no cartão, dentro do próprio checkout. Até 5 usuários.</div>
+          <div class="plan-price-old bw-only">De <s>R$ 699,90</s> por</div>
+          <div class="plan-price bw-only"><sup>R$</sup><strong>559</strong><span>,92<br>por ano, à vista</span></div>
+          <div class="plan-price-note bw-only">Ou em até 3x de R$ 186,64 no cartão, dentro do próprio checkout. Até 5 usuários.</div>
           <div class="plan-rule"></div>
           <strong class="plan-for">Tudo do mensal, e mais</strong>
           <ul>
@@ -240,7 +263,8 @@
           </ul>
           <div class="single-plan-actions">
             <button class="button button-light button-large" data-open-trial>Testar o Simpp grátis <i class="ti ti-arrow-right"></i></button>
-            <a class="button button-primary button-large" href="https://www.asaas.com/000/c/ruo02s8sz4nutgwt" target="_blank" rel="noopener" data-checkout data-checkout-value="699.90">Assinar anual <i class="ti ti-arrow-up-right"></i></a>
+            <a class="button button-primary button-large bw-off" href="https://www.asaas.com/000/c/ruo02s8sz4nutgwt" target="_blank" rel="noopener" data-checkout data-checkout-value="699.90">Assinar anual <i class="ti ti-arrow-up-right"></i></a>
+            <a class="button button-primary button-large bw-only" href="https://www.asaas.com/000/c/fy54js9gvfneb6b1" target="_blank" rel="noopener" data-checkout data-checkout-value="559.92">Assinar com 20% off <i class="ti ti-arrow-up-right"></i></a>
           </div>
           <small class="plan-note">Anexar documentos ao cliente não entra na conta de importações — apenas apólice ou proposta importada. Pacote adicional de importações: R$ 39,90 (quantidade informada no momento da compra).</small>
         </article>
@@ -268,7 +292,7 @@
           <details><summary>O Simpp funciona no celular?<i class="ti ti-plus"></i></summary><p>Sim. O Simpp pode ser acessado pelo navegador do celular, tablet ou computador, sem necessidade de instalar um programa.</p></details>
           <details><summary>O Simpp tem integração com seguradoras?<i class="ti ti-plus"></i></summary><p>Não. Atualmente o Simpp não possui integração direta com seguradoras. Essa funcionalidade entrará futuramente no Simpp.</p></details>
           <details><summary>Meus dados ficam misturados com os de outras corretoras?<i class="ti ti-plus"></i></summary><p>Não. Cada corretora acessa sua própria operação e seus próprios registros. Os usuários entram com credenciais individuais.</p></details>
-          <details><summary>Quanto custa o Simpp hoje?<i class="ti ti-plus"></i></summary><p>Dois jeitos de assinar: R$ 79,90/mês no boleto, ou R$ 699,90/ano à vista (ou em até 3x de R$ 233,30 no cartão, dentro do próprio checkout). Os dois planos incluem todos os recursos disponíveis nesta versão e até 5 usuários. O plano anual ainda inclui até 800 importações com extração automática por ano, por corretora (não por usuário).</p></details>
+          <details><summary>Quanto custa o Simpp hoje?<i class="ti ti-plus"></i></summary><p>Dois jeitos de assinar: R$ 79,90/mês no boleto, ou R$ 699,90/ano à vista (ou em até 3x de R$ 233,30 no cartão, dentro do próprio checkout). Os dois planos incluem todos os recursos disponíveis nesta versão e até 5 usuários. O plano anual ainda inclui até 800 importações com extração automática por ano, por corretora (não por usuário).</p><p class="bw-only"><strong>Black Week, até 01/12:</strong> o anual sai por R$ 559,92 (20% off, ou em até 3x de R$ 186,64 no cartão) e o mensal tem o 1º mês grátis.</p></details>
           <details><summary>Anexar um documento ao cliente conta como importação?<i class="ti ti-plus"></i></summary><p>Não. Anexar um documento ao cadastro do cliente não tem custo nem limite. A franquia de importações do plano anual conta apenas quando você importa uma apólice ou proposta com extração automática de dados — quando o Simpp lê o PDF e preenche as informações sozinho.</p></details>
           <details><summary>O que acontece se eu ultrapassar as importações do plano anual?<i class="ti ti-plus"></i></summary><p>Você pode comprar um pacote adicional de importações por R$ 39,90, cobrado somente quando sua corretora ultrapassar o volume incluído na assinatura. A quantidade de importações de cada pacote é informada antes da compra.</p></details>
           <details><summary>Preciso cadastrar cartão para testar?<i class="ti ti-plus"></i></summary><p>Não. Você pode criar sua conta e conhecer o Simpp sem cadastrar cartão de crédito.</p></details>
@@ -288,11 +312,12 @@
     <div class="container footer-bottom"><span>© 2026 Simpp. Todos os direitos reservados.</span><span>Feito para quem protege o que importa.</span></div>
   </footer>
 
-  <aside class="promotion-popup" id="promotionPopup" aria-label="Oferta promocional" aria-hidden="true">
+  <aside class="promotion-popup bw-off" id="promotionPopup" aria-label="Oferta promocional" aria-hidden="true">
     <button class="promotion-close" type="button" data-close-promotion aria-label="Fechar oferta"><i class="ti ti-x"></i></button>
     <span class="promotion-icon"><i class="ti ti-bolt"></i></span>
-    <div class="promotion-copy"><small>Planos Simpp</small><strong>Mensal sem compromisso ou anual com desconto.</strong><p>Escolha como prefere pagar e comece a organizar sua carteira hoje.</p></div>
-    <div class="promotion-actions"><a class="button button-light" href="https://www.asaas.com/000/c/ruo02s8sz4nutgwt" target="_blank" rel="noopener" data-checkout data-checkout-value="699.90">Assinar anual por R$ 699,90 <i class="ti ti-arrow-up-right"></i></a><button class="promotion-secondary" type="button" data-promotion-trial>Testar primeiro</button></div>
+    <div class="promotion-copy bw-off"><small>Planos Simpp</small><strong>Mensal sem compromisso ou anual com desconto.</strong><p>Escolha como prefere pagar e comece a organizar sua carteira hoje.</p></div>
+    <div class="promotion-copy bw-only"><small>Black Week · até 01/12</small><strong>20% off no anual ou 1º mês grátis no mensal.</strong><p>O melhor preço do ano pra organizar sua corretora.</p></div>
+    <div class="promotion-actions"><a class="button button-light bw-off" href="https://www.asaas.com/000/c/ruo02s8sz4nutgwt" target="_blank" rel="noopener" data-checkout data-checkout-value="699.90">Assinar anual por R$ 699,90 <i class="ti ti-arrow-up-right"></i></a><a class="button button-light bw-only" href="#planos" data-close-promotion-link>Ver oferta <i class="ti ti-arrow-right"></i></a><button class="promotion-secondary" type="button" data-promotion-trial>Testar primeiro</button></div>
   </aside>
 
   <div class="modal-overlay" id="trialModal" aria-hidden="true">
@@ -300,8 +325,9 @@
       <button class="modal-close" data-close-modal aria-label="Fechar"><i class="ti ti-x"></i></button>
       <form id="modalForm">
         <a class="brand modal-brand" href="#"><img class="brand-logo" src="simpp-logo.svg" alt="Simpp gestão simples"></a>
-        <span class="modal-kicker">Oferta atual</span><h2 id="modalTitle">Conheça o Simpp por 7 dias grátis.</h2><p>Depois, continue por R$ 79,90/mês ou R$ 699,90/ano (em até 3x no cartão).</p>
-        <div class="modal-price"><span>Plano anual</span><strong>R$ 699,90</strong><small>Ou R$ 79,90/mês</small></div>
+        <span class="modal-kicker bw-off">Oferta atual</span><span class="modal-kicker bw-only">Black Week · até 01/12</span><h2 id="modalTitle">Conheça o Simpp por 7 dias grátis.</h2><p class="bw-off">Depois, continue por R$ 79,90/mês ou R$ 699,90/ano (em até 3x no cartão).</p><p class="bw-only">Assinando até 01/12: anual com 20% off (R$ 559,92, em até 3x no cartão) ou mensal com o 1º mês grátis.</p>
+        <div class="modal-price bw-off"><span>Plano anual</span><strong>R$ 699,90</strong><small>Ou R$ 79,90/mês</small></div>
+        <div class="modal-price bw-only"><span>Plano anual · 20% off</span><strong>R$ 559,92</strong><small>De <s>R$ 699,90</s></small></div>
         <div class="form-grid"><label>Nome completo<input type="text" id="inputNome" placeholder="Seu nome" autocomplete="name" required></label><label>E-mail<input type="email" id="inputEmail" placeholder="seu@email.com" autocomplete="email" required></label><label>WhatsApp<input type="tel" id="inputWhatsapp" placeholder="(00) 00000-0000" autocomplete="tel" inputmode="tel" required><small class="field-hint">Pode ser usado para confirmar sua conta — informe DDD e número corretos.</small></label><label>Senha<input type="password" id="inputSenha" placeholder="Mínimo 6 caracteres" autocomplete="new-password" minlength="6" required></label><label>Nº de colaboradores<select id="inputColaboradores" required><option value="" disabled selected>Selecione</option><option value="1 a 3">1 a 3</option><option value="3 a 5">3 a 5</option><option value="5 a 10">5 a 10</option></select></label><label>Nº de apólices na carteira<select id="inputApolices" required><option value="" disabled selected>Selecione</option><option value="Até 600">Até 600</option><option value="De 600 a 1200">De 600 a 1200</option><option value="Acima de 1200">Acima de 1200</option></select></label></div>
         <button class="button button-primary button-block" type="submit" id="btnSubmit"><span id="btnTxt">Criar conta e testar grátis</span><i class="ti ti-arrow-right"></i></button><a class="modal-checkout" href="#planos" data-close-modal-link>Prefiro ver os planos e assinar agora <i class="ti ti-arrow-up-right"></i></a><div class="form-error" id="formErro" role="alert"></div><small class="modal-legal"><i class="ti ti-lock"></i> Seus dados são usados apenas para criar sua conta.</small>
       </form>
@@ -309,7 +335,59 @@
     </div>
   </div>
 
+  <!-- Black Week: pop-up central ao entrar no site (uma vez por visita). -->
+  <div class="modal-overlay bw-pop-overlay bw-only" id="bwPopup" aria-hidden="true">
+    <div class="bw-pop" role="dialog" aria-modal="true" aria-labelledby="bwPopTitle">
+      <button class="modal-close" type="button" data-close-bw-popup aria-label="Fechar"><i class="ti ti-x"></i></button>
+      <span class="bw-pop-kicker">Só até 01/12</span>
+      <h2 class="bw-3d bw-pop-title" id="bwPopTitle" data-text="BLACK WEEK">BLACK WEEK</h2>
+      <p class="bw-pop-sub">O melhor preço do ano pra organizar sua corretora no Simpp.</p>
+      <div class="bw-timer bw-pop-timer" data-bw-timer aria-label="Tempo restante da Black Week"></div>
+      <div class="bw-pop-offers">
+        <a class="bw-pop-offer bw-pop-offer-main" href="https://www.asaas.com/000/c/fy54js9gvfneb6b1" target="_blank" rel="noopener" data-checkout data-checkout-value="559.92">
+          <span class="bw-pop-badge">20% off</span>
+          <strong>Plano anual</strong>
+          <span class="bw-pop-price"><s>R$ 699,90</s> R$ 559,92</span>
+          <small>ou em até 3x de R$ 186,64 no cartão</small>
+          <span class="bw-pop-cta">Assinar com 20% off <i class="ti ti-arrow-up-right"></i></span>
+        </a>
+        <button class="bw-pop-offer" type="button" data-open-bw-mensal>
+          <span class="bw-pop-badge">Grátis</span>
+          <strong>Plano mensal</strong>
+          <span class="bw-pop-price">1º mês grátis</span>
+          <small>depois R$ 79,90/mês</small>
+          <span class="bw-pop-cta">Quero o 1º mês grátis <i class="ti ti-arrow-right"></i></span>
+        </button>
+      </div>
+      <button class="bw-pop-secondary" type="button" data-bw-popup-trial>Prefiro testar 7 dias grátis primeiro</button>
+    </div>
+  </div>
+
+  <!-- Black Week: pedido do mensal com 1º mês grátis (vai por e-mail pro suporte do Simpp). -->
+  <div class="modal-overlay" id="bwMensalModal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="bwMensalTitle">
+      <button class="modal-close" type="button" data-close-bw-mensal aria-label="Fechar"><i class="ti ti-x"></i></button>
+      <form id="bwMensalForm" novalidate>
+        <span class="modal-kicker">Black Week · até 01/12</span>
+        <h2 id="bwMensalTitle">Plano mensal com 1º mês grátis</h2>
+        <p>Preencha os dados para assinar. Nossa equipe cria sua assinatura em até 1 dia útil e as faturas chegam no seu e-mail: o 1º mês é grátis e, a partir do 2º, R$ 79,90/mês.</p>
+        <div class="form-grid bw-form-grid">
+          <label class="bw-span">Nome ou razão social<input type="text" name="nome" autocomplete="name" maxlength="120" required></label>
+          <label>CPF ou CNPJ<input type="text" name="documento" inputmode="numeric" maxlength="18" placeholder="000.000.000-00" required></label>
+          <label>Telefone / WhatsApp<input type="tel" name="telefone" inputmode="tel" autocomplete="tel" maxlength="20" placeholder="(00) 00000-0000" required></label>
+          <label class="bw-span">E-mail<input type="email" name="email" autocomplete="email" maxlength="160" placeholder="seu@email.com" required></label>
+          <label class="bw-span">Endereço completo<input type="text" name="endereco" autocomplete="street-address" maxlength="300" placeholder="Rua, número, bairro, cidade/UF e CEP" required></label>
+          <input class="bw-hp" type="text" name="site" tabindex="-1" autocomplete="off" aria-hidden="true">
+        </div>
+        <button class="button button-primary button-block" type="submit" id="bwMensalEnviar">Assinar com 1º mês grátis <i class="ti ti-arrow-right"></i></button>
+        <div class="form-error" id="bwMensalErro" role="alert"></div>
+        <small class="modal-legal"><i class="ti ti-lock"></i> Seus dados são usados só para criar sua assinatura. <a href="privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a></small>
+      </form>
+      <div class="modal-success" id="bwMensalOk"><span><i class="ti ti-circle-check"></i></span><h2>Assinatura solicitada!</h2><p>Recebemos seus dados. Em até 1 dia útil nossa equipe cria sua assinatura e você recebe o acesso e as faturas no seu e-mail.</p><button class="button button-primary button-block" type="button" data-close-bw-mensal>Fechar</button></div>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="script.js?v=5"></script>
+  <script src="script.js?v=8"></script>
 </body>
 </html>

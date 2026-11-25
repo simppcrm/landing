@@ -365,3 +365,8 @@ h1{font:800 clamp(48px,5.5vw,74px)/.99 Manrope,sans-serif;letter-spacing:-.065em
 }
 
 @media(prefers-reduced-motion:reduce){.promotion-popup{transition:none}}
+
+/* Black Week (25/11 a 01/12/2026): o <html> recebe a classe "bw" até o fim
+   da campanha (script no <head>). .bw-only só aparece nela; .bw-off some nela. */
+html:not(.bw) .bw-only{display:none!important}
+html.bw .bw-off{display:none!important}

@@ -75,6 +75,28 @@ if (promotionPopup) {
     closePromotion(true);
     openModal();
   });
+  document.querySelectorAll('[data-close-promotion-link]').forEach((link) => link.addEventListener('click', () => closePromotion(true)));
+}
+
+// Black Week: contagem regressiva na faixa do topo. Se a página ficar aberta
+// até o fim da campanha, sai do modo Black Week sozinha.
+const bwTimer = document.getElementById('bwTimer');
+function atualizarBlackWeek() {
+  const restante = window.BLACK_WEEK_FIM - Date.now();
+  if (restante <= 0) {
+    document.documentElement.classList.remove('bw');
+    return false;
+  }
+  if (bwTimer) {
+    const dias = Math.floor(restante / 86400000);
+    const horas = Math.floor((restante % 86400000) / 3600000);
+    const minutos = Math.floor((restante % 3600000) / 60000);
+    bwTimer.textContent = 'Termina em ' + (dias ? dias + 'd ' : '') + String(horas).padStart(2, '0') + 'h ' + String(minutos).padStart(2, '0') + 'min';
+  }
+  return true;
+}
+if (document.documentElement.classList.contains('bw') && atualizarBlackWeek()) {
+  const bwIntervalo = setInterval(() => { if (!atualizarBlackWeek()) clearInterval(bwIntervalo); }, 30000);
 }
 
 document.querySelectorAll('[data-checkout]').forEach((link) => {

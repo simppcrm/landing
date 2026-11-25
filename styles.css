@@ -534,3 +534,6 @@ html.bw .mock-hint{box-shadow:none}
   html.bw .popular{right:18px;max-width:calc(100% - 36px);font-size:9px}
   html.bw .promotion-actions{gap:10px}
 }
+
+/* Campo escondido anti-robô do formulário da Black Week (não remover). */
+.bw-hp{position:absolute!important;left:-9999px!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important}
